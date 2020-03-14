@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +39,7 @@ public class UserController {
     @ApiOperation("用户登录")
     @PostMapping("/login")
     @TokenIgnore
-    public ResponseResult login(@RequestBody UserDTO userDTO) {
+    public ResponseResult login(@RequestBody @Validated UserDTO userDTO) {
         User userForBase = userService.findByUsername(userDTO.getUsername());
         if (userForBase == null) {
             return ResponseResult.error(GlobalCode.USER_NOT_EXISTS_ERROR);
@@ -68,13 +67,8 @@ public class UserController {
     @TokenIgnore
     @ApiOperation("用户申请账户")
     @PostMapping("/register")
-    public ResponseResult register(@RequestBody @Validated UserDTO userDTO,
-                                   BindingResult bindingResult) {
+    public ResponseResult register(@RequestBody @Validated UserDTO userDTO) {
         try {
-            if (bindingResult.hasErrors()) {
-                return ResponseResult.error(GlobalCode.INVALID_PARAM_ERROR, bindingResult.getAllErrors().get(0).getDefaultMessage());
-            }
-
             return userService.register(userDTO);
         } catch (Exception e) {
             log.error("用户注册失败：", e);

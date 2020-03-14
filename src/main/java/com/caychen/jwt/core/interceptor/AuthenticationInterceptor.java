@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.caychen.jwt.core.annotation.TokenIgnore;
 import com.caychen.jwt.core.error.CustomException;
+import com.caychen.jwt.core.error.GlobalCode;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -36,7 +37,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (token == null) {
-            throw new CustomException("无token，请重新登录");
+            throw new CustomException(GlobalCode.TOKEN_NOT_EXISTS_ERROR);
         }
 
         DecodedJWT decode = JWT.decode(token);

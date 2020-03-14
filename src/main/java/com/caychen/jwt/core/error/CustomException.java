@@ -7,7 +7,17 @@ package com.caychen.jwt.core.error;
  */
 public class CustomException extends Exception {
 
+    private GlobalCode code;
+
     public CustomException(String message) {
         super(message);
+    }
+
+    public CustomException(GlobalCode code){
+        this.code = code;
+    }
+
+    public GlobalCode getCode() {
+        return code;
     }
 }
